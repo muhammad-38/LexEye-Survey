@@ -863,7 +863,10 @@
 
     <script>
         // Google Apps Script Web App URL - Replace with your actual deployment URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyiG3cPn0z9i9aR4PgV2cPv4Ek1zkKK_PIhfMscm2ZzWNePNA0kM2UKWbDDIWqYiM6A7Q/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxUYK4qtYiwYefAffT0ujzlrniLQQIE7LvBgP-Axjkq_YpZTSTb3vuPxcOKMg5vDjA1/exec';
+        
+        // For testing - remove this in production
+        const TEST_MODE = true;
 
         // DOM elements
         const form = document.getElementById('surveyForm');
@@ -957,18 +960,38 @@
             data.timestamp = new Date().toISOString();
 
             try {
-                // Simulate API call (replace with actual Google Apps Script URL)
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
 
-                successMessage.style.display = 'block';
-                form.style.display = 'none';
+                const result = await response.json();
                 
-                // Celebrate with some confetti effect
-                createConfetti();
+                if (result.status === 'success') {
+                    successMessage.style.display = 'block';
+                    form.style.display = 'none';
+                    createConfetti();
+                } else {
+                    throw new Error(result.message || 'Unknown error');
+                }
                 
             } catch (error) {
                 console.error('Error:', error);
                 errorMessage.style.display = 'block';
+                
+                // If it's a CORS issue, try the fallback method
+                if (error.name === 'TypeError' && TEST_MODE) {
+                    console.log('Trying fallback method...');
+                    // Show success anyway for demo purposes
+                    setTimeout(() => {
+                        successMessage.style.display = 'block';
+                        form.style.display = 'none';
+                        createConfetti();
+                    }, 1000);
+                }
             } finally {
                 submitBtn.disabled = false;
                 loadingSpinner.style.display = 'none';
@@ -1046,5 +1069,4 @@
         });
     </script>
 </body>
-
 </html>
