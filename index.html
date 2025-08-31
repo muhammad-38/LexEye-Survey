@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LexEye - Know Your Rights, Own Your Power</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 80%, #ff6b6b22 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, #4ecdc422 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, #45b7d122 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>') repeat;
+            animation: grid-move 20s linear infinite;
+        }
+
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(10px, 10px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s ease infinite;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            color: #888;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero .tagline {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: #4ecdc4;
+            margin-bottom: 3rem;
+            font-weight: 500;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.3);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        /* Survey Form */
+        .survey-container {
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            margin: 2rem;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .survey-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 300% 100%;
+            animation: progress-glow 2s ease infinite;
+        }
+
+        @keyframes progress-glow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideIn 0.6s ease forwards;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .section-description {
+            color: #888;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .input-field::placeholder {
+            color: #666;
+        }
+
+        .textarea-field {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .option-card:hover {
+            border-color: rgba(78, 205, 196, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .option-card:hover::before {
+            opacity: 1;
+        }
+
+        .option-card.selected {
+            border-color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .option-card.selected::before {
+            opacity: 1;
+        }
+
+        .option-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .option-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .option-card.selected .option-radio {
+            border-color: #4ecdc4;
+            background: #4ecdc4;
+        }
+
+        .option-card.selected .option-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: #ffffff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .option-text {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .other-input {
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .submit-section {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .submit-button {
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
+            background-size: 300% 100%;
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: gradient-shift 3s ease infinite;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.4);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+
+        .message {
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #4caf50;
+        }
+
+        .error-message {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #f44336;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .survey-container {
+                margin: 1rem;
+                padding: 2rem;
+            }
+            
+            .section-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Fun Interactive Elements */
+        .floating-icons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float-icon 15s infinite linear;
+        }
+
+        .floating-icon:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .floating-icon:nth-child(2) { left: 20%; animation-delay: 2s; }
+        .floating-icon:nth-child(3) { left: 30%; animation-delay: 4s; }
+        .floating-icon:nth-child(4) { left: 40%; animation-delay: 6s; }
+        .floating-icon:nth-child(5) { left: 50%; animation-delay: 8s; }
+        .floating-icon:nth-child(6) { left: 60%; animation-delay: 10s; }
+        .floating-icon:nth-child(7) { left: 70%; animation-delay: 12s; }
+        .floating-icon:nth-child(8) { left: 80%; animation-delay: 14s; }
+
+        @keyframes float-icon {
+            0% { 
+                transform: translateY(100vh) rotate(0deg); 
+                opacity: 0;
+            }
+            10% { opacity: 0.1; }
+            90% { opacity: 0.1; }
+            100% { 
+                transform: translateY(-100px) rotate(360deg); 
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="floating-icons">
+        <div class="floating-icon">⚖️</div>
+        <div class="floating-icon">🛡️</div>
+        <div class="floating-icon">📜</div>
+        <div class="floating-icon">💪</div>
+        <div class="floating-icon">🎯</div>
+        <div class="floating-icon">⚡</div>
+        <div class="floating-icon">🔥</div>
+        <div class="floating-icon">✨</div>
+    </div>
+
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="container">
+        <div class="hero">
+            <div class="hero-content">
+                <h1>LexEye</h1>
+                <p class="subtitle">Your Legal Rights, Simplified</p>
+                <p class="tagline">"Know Your Rights, Own Your Power"</p>
+                <a href="#survey" class="cta-button">Help Us Build Something Amazing</a>
+            </div>
+        </div>
+
+        <div class="survey-container" id="survey">
+            <div class="message success-message" id="successMessage">
+                <strong>🎉 Amazing!</strong> Your insights will help us create the legal assistant you actually want to use!
+            </div>
+
+            <div class="message error-message" id="errorMessage">
+                <strong>Oops!</strong> Something went wrong. Let's try that again!
+            </div>
+
+            <form id="surveyForm">
+                <!-- Section 1: Personal Information -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <div>
+                            <div class="section-title">Let's Get To Know You</div>
+                            <div class="section-description">Help us understand who we're building for</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">What should we call you? *</label>
+                        <input type="text" id="name" name="name" class="input-field" placeholder="Your awesome name..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Your email (we promise not to spam!) *</label>
+                        <input type="email" id="email" name="email" class="input-field" placeholder="you@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Which generation are you from? *</label>
+                        <div class="options-grid">
+                            <div class="option-card" data-value="Under 18">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Under 18 - Gen Alpha 🚀</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="18–24">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">18–24 - Gen Z Power ⚡</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="25–34">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">25–34 - Millennial Hustle 💪</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="35–44">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">35–44 - Experienced & Wise 🎯</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="45+">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">45+ - Seasoned Pro 👑</div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="age_group" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">How do you identify? *</label>
+                        <div class="options-grid">
+                            <div class="option-card" data-value="Male">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Male</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Female">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Female</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Prefer not to say">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Prefer not to say</div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="gender" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">What's your current vibe? *</label>
+                        <div class="options-grid">
+                            <div class="option-card" data-value="Student">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Student - Learning Mode 📚</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Teacher / Academic Staff">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Teacher / Academic Staff - Knowledge Sharer 🎓</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Professional (Job/Business)">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Professional - Business Mode 💼</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Other">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Other - Tell us more! ✨</div>
+                                </div>
+                                <input type="text" class="input-field other-input" placeholder="What's your story?" name="other_status_text">
+                            </div>
+                        </div>
+                        <input type="hidden" name="status" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Your field of expertise?</label>
+                        <input type="text" id="department" name="department" class="input-field" placeholder="Computer Science, Law, Business, Arts, etc.">
+                    </div>
+                </div>
+
+                <!-- Section 2: Awareness & Needs -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <div>
+                            <div class="section-title">Your Legal Reality Check</div>
+                            <div class="section-description">Let's understand the legal challenges you face</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Ever been in a situation and thought "I wish I knew my rights"? *</label>
+                        <div class="options-grid">
+                            <div class="option-card" data-value="Yes (and I struggled a lot)">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Yes, and it was rough 😰</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Yes (but I managed somehow)">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Yes, but I figured it out 🤷‍♀️</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="No">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Nope, all good so far 😎</div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="legal_situation" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">What legal drama do young people face most? *</label>
+                        <div class="options-grid">
+                            <div class="option-card" data-value="Harassment / Cyberbullying">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Harassment / Cyberbullying 🛡️</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Landlord & Rental Issues">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Landlord & Rental Issues 🏠</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Police Stops / FIRs">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Police Stops / FIRs 🚨</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Job & Workplace Problems">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Job & Workplace Problems 💼</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Other">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Something else entirely 🤔</div>
+                                </div>
+                                <input type="text" class="input-field other-input" placeholder="What's the real issue?" name="legal_issues_other_text">
+                            </div>
+                        </div>
+                        <input type="hidden" name="legal_issues" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">When you need legal help, where do you turn? *</label>
+                        <div class="options-grid">
+                            <div class="option-card" data-value="Google/Internet Search">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Google University 🔍</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Friends & Family">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Friends & Family Wisdom 👥</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Lawyers/Professionals">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Actual Lawyers (fancy!) ⚖️</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Nowhere (I usually ignore it)">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">I just ignore it 🙈</div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="legal_guidance" required>
+                    </div>
+                </div>
+
+                <!-- Section 3: Feature Preferences -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-icon">🚀</div>
+                        <div>
+                            <div class="section-title">Design Your Dream Legal App</div>
+                            <div class="section-description">Help us build exactly what you want</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">How do you like to learn about your rights? *</label>
+                        <div class="options-grid">
+                            <div class="option-card" data-value="Short summarized guides">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Quick & punchy summaries 📝</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Step-by-step instructions (like tutorials)">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Step-by-step tutorials 📋</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Videos & Infographics">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Videos & Visual stuff 🎥</div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="learning_preference" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">If LexEye had ONE killer premium feature, what would make you go "TAKE MY MONEY!"? *</label>
+                        <div class="options-grid">
+                            <div class="option-card" data-value="Connect with a lawyer for consultation">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Direct lawyer chat 💬</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Downloadable legal templates (contracts, complaints, etc.)">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Ready-to-use legal templates 📄</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Emergency 'Know Your Rights' quick-access button">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Emergency rights button 🚨</div>
+                                </div>
+                            </div>
+                            <div class="option-card" data-value="Anonymous Q&A forum">
+                                <div class="option-content">
+                                    <div class="option-radio"></div>
+                                    <div class="option-text">Anonymous Q&A community 🤝</div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="premium_feature" required>
+                    </div>
+                </div>
+
+                <!-- Section 4: Recommendations -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-icon">💡</div>
+                        <div>
+                            <div class="section-title">Help Us Build Better</div>
+                            <div class="section-description">Your feedback is pure gold to us</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">What's your biggest frustration when seeking legal help?</label>
+                        <textarea id="biggest_challenge" name="biggest_challenge" class="input-field textarea-field" placeholder="Tell us about that one time when you needed legal help but..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">If you could design LexEye yourself, what would you add?</label>
+                        <textarea id="suggestions" name="suggestions" class="input-field textarea-field" placeholder="Dream big! What would make this the legal app you actually want to use?"></textarea>
+                    </div>
+                </div>
+
+                <div class="submit-section">
+                    <button type="submit" class="submit-button" id="submitBtn">
+                        <span class="loading-spinner" id="loadingSpinner"></span>
+                        Launch LexEye Into Orbit! 🚀
+                    </button>
+                    <p style="margin-top: 1rem; color: #888; font-size: 0.9rem;">
+                        Your insights will help us create something incredible together
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Google Apps Script Web App URL - Replace with your actual deployment URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+
+        // DOM elements
+        const form = document.getElementById('surveyForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const progressBar = document.getElementById('progressBar');
+
+        // Handle option cards
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const groupName = this.closest('.form-group').querySelector('input[type="hidden"]').name;
+                const value = this.dataset.value;
+                
+                // Remove selected class from siblings
+                this.parentNode.querySelectorAll('.option-card').forEach(sibling => {
+                    sibling.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked card
+                this.classList.add('selected');
+                
+                // Update hidden input
+                this.closest('.form-group').querySelector('input[type="hidden"]').value = value;
+                
+                // Handle "Other" inputs
+                const otherInput = this.querySelector('.other-input');
+                if (otherInput) {
+                    otherInput.style.display = 'block';
+                    otherInput.focus();
+                } else {
+                    // Hide other inputs in the same group
+                    this.parentNode.querySelectorAll('.other-input').forEach(input => {
+                        input.style.display = 'none';
+                        input.value = '';
+                    });
+                }
+                
+                updateProgress();
+            });
+        });
+
+        // Progress calculation
+        function updateProgress() {
+            const requiredInputs = form.querySelectorAll('input[required]');
+            let completed = 0;
+            let total = 0;
+
+            requiredInputs.forEach(input => {
+                if (input.type === 'hidden') {
+                    total++;
+                    if (input.value) completed++;
+                } else {
+                    total++;
+                    if (input.value.trim()) completed++;
+                }
+            });
+
+            const percentage = (completed / total) * 100;
+            progressBar.style.width = percentage + '%';
+        }
+
+        // Smooth scroll to survey
+        document.querySelector('.cta-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('survey').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+
+        // Form submission with style
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            submitBtn.disabled = true;
+            loadingSpinner.style.display = 'inline-block';
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+
+            const formData = new FormData(form);
+            const data = {};
+
+            // Convert FormData to regular object
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+
+            // Add timestamp
+            data.timestamp = new Date().toISOString();
+
+            try {
+                // Simulate API call (replace with actual Google Apps Script URL)
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                successMessage.style.display = 'block';
+                form.style.display = 'none';
+                
+                // Celebrate with some confetti effect
+                createConfetti();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                errorMessage.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                loadingSpinner.style.display = 'none';
+            }
+        });
+
+        // Confetti celebration
+        function createConfetti() {
+            const confettiCount = 50;
+            const confetti = [];
+
+            for (let i = 0; i < confettiCount; i++) {
+                const confettiElement = document.createElement('div');
+                confettiElement.style.cssText = `
+                    position: fixed;
+                    width: 10px;
+                    height: 10px;
+                    background: ${['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4'][Math.floor(Math.random() * 4)]};
+                    left: ${Math.random() * 100}vw;
+                    top: -10px;
+                    z-index: 10000;
+                    pointer-events: none;
+                    border-radius: 50%;
+                `;
+                document.body.appendChild(confettiElement);
+
+                const animation = confettiElement.animate([
+                    { transform: 'translateY(-10px) rotate(0deg)', opacity: 1 },
+                    { transform: `translateY(100vh) rotate(720deg)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 2000 + 1000,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                });
+
+                animation.addEventListener('finish', () => {
+                    confettiElement.remove();
+                });
+            }
+        }
+
+        // Initialize progress
+        updateProgress();
+
+        // Update progress on input changes
+        form.addEventListener('input', updateProgress);
+        form.addEventListener('change', updateProgress);
+
+        // Add some interactive particles on mouse move
+        let mouseTimeout;
+        document.addEventListener('mousemove', function(e) {
+            clearTimeout(mouseTimeout);
+            mouseTimeout = setTimeout(() => {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: fixed;
+                    width: 4px;
+                    height: 4px;
+                    background: rgba(78, 205, 196, 0.6);
+                    border-radius: 50%;
+                    left: ${e.clientX}px;
+                    top: ${e.clientY}px;
+                    pointer-events: none;
+                    z-index: 9999;
+                `;
+                document.body.appendChild(particle);
+
+                particle.animate([
+                    { opacity: 1, transform: 'scale(1)' },
+                    { opacity: 0, transform: 'scale(3)' }
+                ], {
+                    duration: 800,
+                    easing: 'ease-out'
+                }).addEventListener('finish', () => particle.remove());
+            }, 10);
+        });
+    </script>
+</body>
+</html>
