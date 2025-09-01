@@ -863,80 +863,114 @@
 
     <script>
   // Replace with your Google Script Web App URL
-  const scriptURL = "https://script.google.com/macros/s/AKfycbyHOFwLoVDojjo6blsMmQ_-gbvq0cMEGq8HQe7EnKcb13FncU3AHOiCx00dTbY3hXiVMQ/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbyHOFwLoVDojjo6blsMmQ_-gbvq0cMEGq8HQe7EnKcb13FncU3AHOiCx00dTbY3hXiVMQ/exec";
 
-  // Handle option-card selections
-  document.querySelectorAll(".form-group").forEach(group => {
-    const hiddenInput = group.querySelector("input[type=hidden]");
-    if (!hiddenInput) return;
+// Handle option-card selections
+document.querySelectorAll(".form-group").forEach(group => {
+  const hiddenInput = group.querySelector("input[type=hidden]");
+  if (!hiddenInput) return;
 
-    const optionCards = group.querySelectorAll(".option-card");
-    optionCards.forEach(card => {
-      card.addEventListener("click", () => {
-        // Remove 'selected' from all cards in this group
-        optionCards.forEach(c => c.classList.remove("selected"));
-        // Mark clicked card
-        card.classList.add("selected");
+  const optionCards = group.querySelectorAll(".option-card");
+  optionCards.forEach(card => {
+    card.addEventListener("click", () => {
+      // Remove 'selected' from all cards in this group
+      optionCards.forEach(c => c.classList.remove("selected"));
+      // Mark clicked card
+      card.classList.add("selected");
 
-        // Save value into hidden input
-        hiddenInput.value = card.getAttribute("data-value");
+      // Save value into hidden input
+      hiddenInput.value = card.getAttribute("data-value");
 
-        // If this card has an "other" input, show it
-        const otherInput = card.querySelector(".other-input");
-        if (otherInput) {
-          otherInput.style.display = "block";
-          otherInput.addEventListener("input", () => {
-            hiddenInput.value = otherInput.value || card.getAttribute("data-value");
-          });
-        }
-
-        // Hide other "other-inputs" in same group
-        optionCards.forEach(c => {
-          if (c !== card) {
-            const oi = c.querySelector(".other-input");
-            if (oi) {
-              oi.style.display = "none";
-              oi.value = "";
-            }
-          }
+      // If this card has an "other" input, show it
+      const otherInput = card.querySelector(".other-input");
+      if (otherInput) {
+        otherInput.style.display = "block";
+        otherInput.addEventListener("input", () => {
+          hiddenInput.value = otherInput.value || card.getAttribute("data-value");
         });
+      }
+
+      // Hide other "other-inputs" in same group
+      optionCards.forEach(c => {
+        if (c !== card) {
+          const oi = c.querySelector(".other-input");
+          if (oi) {
+            oi.style.display = "none";
+            oi.value = "";
+          }
+        }
       });
     });
   });
+});
 
-  // Handle form submission
-  document.getElementById("surveyForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+// Handle form submission
+document.getElementById("surveyForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const submitBtn = document.getElementById("submitBtn");
+  const loadingSpinner = document.getElementById("loadingSpinner");
+  const successMessage = document.getElementById("successMessage");
+  const errorMessage = document.getElementById("errorMessage");
+  
+  // Show loading state
+  submitBtn.disabled = true;
+  loadingSpinner.style.display = "inline-block";
+  submitBtn.innerHTML = '<span class="loading-spinner" style="display: inline-block;"></span> Sending...';
+  
+  // Hide previous messages
+  successMessage.style.display = "none";
+  errorMessage.style.display = "none";
 
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
+  
+  // Log data for debugging (remove in production)
+  console.log("Form data:", data);
 
-    try {
-      const res = await fetch(scriptURL, {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-      });
+  try {
+    const response = await fetch(scriptURL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data)
+    });
 
-      if (res.ok) {
-        document.getElementById("successMessage").style.display = "block";
-        document.getElementById("errorMessage").style.display = "none";
-        e.target.reset();
-        // clear selections
-        document.querySelectorAll(".option-card").forEach(c => c.classList.remove("selected"));
-      } else {
-        throw new Error("Request failed");
-      }
-    } catch (err) {
-      document.getElementById("errorMessage").style.display = "block";
-      document.getElementById("successMessage").style.display = "none";
+    const result = await response.json();
+    console.log("Response:", result);
+
+    if (result.status === "success") {
+      successMessage.style.display = "block";
+      errorMessage.style.display = "none";
+      e.target.reset();
+      // Clear all selections
+      document.querySelectorAll(".option-card").forEach(c => c.classList.remove("selected"));
+      document.querySelectorAll("input[type=hidden]").forEach(input => input.value = "");
+      
+      // Scroll to success message
+      successMessage.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      throw new Error(result.message || "Submission failed");
     }
-  });
+  } catch (error) {
+    console.error("Error:", error);
+    errorMessage.style.display = "block";
+    successMessage.style.display = "none";
+    errorMessage.innerHTML = `<strong>Oops!</strong> ${error.message || "Something went wrong. Please try again!"}`;
+  } finally {
+    // Reset button state
+    submitBtn.disabled = false;
+    loadingSpinner.style.display = "none";
+    submitBtn.innerHTML = 'Launch LexEye Into Orbit! 🚀';
+  }
+});
 </script>
 
 
 </body>
 </html>
+
 
 
 
