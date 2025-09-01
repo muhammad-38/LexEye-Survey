@@ -940,64 +940,77 @@
         });
 
         // Form submission with style
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
+       // Form submission with CORS fix
+form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    submitBtn.disabled = true;
+    loadingSpinner.style.display = 'inline-block';
+    successMessage.style.display = 'none';
+    errorMessage.style.display = 'none';
+
+    const formData = new FormData(form);
+    const data = {};
+
+    // Convert FormData to regular object
+    for (let [key, value] of formData.entries()) {
+        data[key] = value;
+    }
+
+    // Add timestamp
+    data.timestamp = new Date().toISOString();
+
+    try {
+        // Use JSONP to avoid CORS issues
+        const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+        
+        // Create callback function
+        window[callbackName] = function(response) {
+            console.log('Response received:', response);
             
-            submitBtn.disabled = true;
-            loadingSpinner.style.display = 'inline-block';
-            successMessage.style.display = 'none';
-            errorMessage.style.display = 'none';
-
-            const formData = new FormData(form);
-            const data = {};
-
-            // Convert FormData to regular object
-            for (let [key, value] of formData.entries()) {
-                data[key] = value;
+            if (response.status === 'success') {
+                successMessage.style.display = 'block';
+                document.getElementById('survey').style.display = 'none';
+                createConfetti();
+            } else {
+                throw new Error(response.message || 'Unknown error');
             }
-
-            // Add timestamp
-            data.timestamp = new Date().toISOString();
-
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-                
-                if (result.status === 'success') {
-                    successMessage.style.display = 'block';
-                    form.style.display = 'none';
-                    createConfetti();
-                } else {
-                    throw new Error(result.message || 'Unknown error');
-                }
-                
-            } catch (error) {
-                console.error('Error:', error);
-                errorMessage.style.display = 'block';
-                
-                // If it's a CORS issue, try the fallback method
-                if (error.name === 'TypeError' && TEST_MODE) {
-                    console.log('Trying fallback method...');
-                    // Show success anyway for demo purposes
-                    setTimeout(() => {
-                        successMessage.style.display = 'block';
-                        form.style.display = 'none';
-                        createConfetti();
-                    }, 1000);
-                }
-            } finally {
-                submitBtn.disabled = false;
-                loadingSpinner.style.display = 'none';
-            }
+            
+            // Clean up
+            document.head.removeChild(script);
+            delete window[callbackName];
+            
+            submitBtn.disabled = false;
+            loadingSpinner.style.display = 'none';
+        };
+        
+        // Create script tag for JSONP
+        const script = document.createElement('script');
+        const params = new URLSearchParams({
+            callback: callbackName,
+            jsonData: JSON.stringify(data)
         });
-
+        
+        script.src = SCRIPT_URL + '?' + params.toString();
+        script.onerror = function() {
+            errorMessage.style.display = 'block';
+            submitBtn.disabled = false;
+            loadingSpinner.style.display = 'none';
+            
+            // Clean up
+            document.head.removeChild(script);
+            delete window[callbackName];
+        };
+        
+        document.head.appendChild(script);
+        
+    } catch (error) {
+        console.error('Error:', error);
+        errorMessage.style.display = 'block';
+        submitBtn.disabled = false;
+        loadingSpinner.style.display = 'none';
+    }
+});
         // Confetti celebration
         function createConfetti() {
             const confettiCount = 50;
@@ -1070,5 +1083,6 @@
     </script>
 </body>
 </html>
+
 
 
